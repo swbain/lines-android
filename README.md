@@ -1,6 +1,6 @@
-# stephen's android template
+# lines-android
 
-This a simple, architecture agnostic template to bootstrap android development. Dependencies will change as my personal preferences do.
+android app for https://llllllll.co/
 
 ## Current stack:
 + kotlin

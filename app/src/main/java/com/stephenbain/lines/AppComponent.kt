@@ -1,6 +1,6 @@
-package com.stephenbain.androidtemplate
+package com.stephenbain.lines
 
-import com.stephenbain.androidtemplate.home.HomeModule
+import com.stephenbain.lines.home.HomeModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule

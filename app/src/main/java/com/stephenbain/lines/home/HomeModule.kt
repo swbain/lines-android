@@ -1,4 +1,4 @@
-package com.stephenbain.androidtemplate.home
+package com.stephenbain.lines.home
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

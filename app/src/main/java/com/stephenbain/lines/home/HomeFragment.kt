@@ -1,10 +1,10 @@
-package com.stephenbain.androidtemplate.home
+package com.stephenbain.lines.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.stephenbain.androidtemplate.R
+import com.stephenbain.lines.R
 import dagger.android.support.DaggerFragment
 
 class HomeFragment : DaggerFragment() {

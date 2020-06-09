@@ -1,4 +1,4 @@
-package com.stephenbain.androidtemplate
+package com.stephenbain.lines
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

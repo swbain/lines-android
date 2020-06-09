@@ -1,4 +1,4 @@
-package com.stephenbain.androidtemplate
+package com.stephenbain.lines
 
 import org.junit.Assert.*
 import org.junit.Test

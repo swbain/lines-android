@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.stephenbain.lines.R
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-class HomeFragment : DaggerFragment() {
+@AndroidEntryPoint
+class HomeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

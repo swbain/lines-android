@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 data class GetLatestApiResponse(val topic_list: TopicList)
 
 @JsonClass(generateAdapter = true)
-data class TopicList(val topics: List<Topic>)
+data class TopicList(val topics: List<TopicJson>)
 
 @JsonClass(generateAdapter = true)
-data class Topic(val id: Long, val title: String)
+data class TopicJson(val id: Long, val title: String)

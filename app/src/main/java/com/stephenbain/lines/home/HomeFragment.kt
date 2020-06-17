@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.stephenbain.lines.common.api.Topic
+import com.stephenbain.lines.common.api.TopicJson
 import com.stephenbain.lines.databinding.FragmentHomeBinding
 import com.stephenbain.lines.databinding.ListItemTopicBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -40,15 +42,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycler.adapter = adapter
         binding.recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        viewModel.state.observe(viewLifecycleOwner, ::handleState)
+
+        viewModel.loading().observe(viewLifecycleOwner) { binding.loading.isVisible = it }
+        viewModel.topics().observe(viewLifecycleOwner) { adapter.submitList(it) }
     }
 
-    private fun handleState(state: HomeState) {
-        binding.loading.isVisible = state.loading
-        adapter.submitList(state.topics)
-    }
-
-    private class HomeAdapter : ListAdapter<Topic, HomeViewHolder>(DIFF_CALLBACK) {
+    private class HomeAdapter : ListAdapter<TopicJson, HomeViewHolder>(DIFF_CALLBACK) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
             val binding = ListItemTopicBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -60,12 +59,12 @@ class HomeFragment : Fragment() {
         }
 
         companion object {
-            private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Topic>() {
-                override fun areItemsTheSame(oldItem: Topic, newItem: Topic): Boolean {
+            private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<TopicJson>() {
+                override fun areItemsTheSame(oldItem: TopicJson, newItem: TopicJson): Boolean {
                     return oldItem.id == newItem.id
                 }
 
-                override fun areContentsTheSame(oldItem: Topic, newItem: Topic): Boolean {
+                override fun areContentsTheSame(oldItem: TopicJson, newItem: TopicJson): Boolean {
                     return oldItem == newItem
                 }
 
@@ -74,7 +73,7 @@ class HomeFragment : Fragment() {
     }
 
     private class HomeViewHolder(private val binding: ListItemTopicBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(topic: Topic) {
+        fun bind(topic: TopicJson) {
             binding.title.text = topic.title
         }
     }

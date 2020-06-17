@@ -1,4 +1,4 @@
-package com.stephenbain.lines.common.api
+package com.stephenbain.lines.api
 
 import com.squareup.moshi.JsonClass
 

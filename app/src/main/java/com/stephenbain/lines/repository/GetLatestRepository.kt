@@ -1,7 +1,7 @@
-package com.stephenbain.lines.common.repository
+package com.stephenbain.lines.repository
 
-import com.stephenbain.lines.common.api.LinesApiService
-import com.stephenbain.lines.common.api.TopicJson
+import com.stephenbain.lines.api.LinesApiService
+import com.stephenbain.lines.api.TopicJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.stephenbain.lines.common.api.TopicJson
+import com.stephenbain.lines.api.TopicJson
 import com.stephenbain.lines.databinding.FragmentHomeBinding
 import com.stephenbain.lines.databinding.ListItemTopicBinding
 import dagger.hilt.android.AndroidEntryPoint

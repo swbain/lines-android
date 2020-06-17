@@ -2,12 +2,11 @@ package com.stephenbain.lines.home
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.stephenbain.lines.common.api.TopicJson
-import com.stephenbain.lines.common.repository.GetLatestRepository
+import com.stephenbain.lines.api.TopicJson
+import com.stephenbain.lines.repository.GetLatestRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 @FlowPreview

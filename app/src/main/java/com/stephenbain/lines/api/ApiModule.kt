@@ -1,6 +1,5 @@
-package com.stephenbain.lines.common.api
+package com.stephenbain.lines.api
 
-import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

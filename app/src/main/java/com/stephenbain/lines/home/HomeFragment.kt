@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         binding.recycler.adapter = adapter
         binding.recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        viewModel.topics().observe(viewLifecycleOwner, ::handleResource)
+        viewModel.topics.observe(viewLifecycleOwner, ::handleResource)
     }
 
     private fun handleResource(resource: Resource<List<TopicJson>>) = when (resource) {

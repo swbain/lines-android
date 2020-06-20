@@ -16,11 +16,9 @@ import kotlinx.coroutines.flow.*
 class HomeViewModel @ViewModelInject constructor(getLatestRepo: GetLatestRepository) :
     ViewModel() {
 
-    private val topics = getLatestRepo.getLatestTopics()
+    val topics = getLatestRepo.getLatestTopics()
         .toResource()
         .flowOn(Dispatchers.IO)
         .asLiveData(viewModelScope.coroutineContext)
-
-    fun topics(): LiveData<Resource<List<TopicJson>>> = topics
 
 }

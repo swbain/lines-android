@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.stephenbain.lines.api.TopicJson
+import com.stephenbain.lines.common.Resource
 import com.stephenbain.lines.databinding.FragmentHomeBinding
 import com.stephenbain.lines.databinding.ListItemTopicBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,8 +45,27 @@ class HomeFragment : Fragment() {
         binding.recycler.adapter = adapter
         binding.recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        viewModel.loading().observe(viewLifecycleOwner) { binding.loading.isVisible = it }
-        viewModel.topics().observe(viewLifecycleOwner) { adapter.submitList(it) }
+        viewModel.topics().observe(viewLifecycleOwner, ::handleResource)
+    }
+
+    private fun handleResource(resource: Resource<List<TopicJson>>) = when (resource) {
+        is Resource.Loading -> showLoading()
+        is Resource.Success -> showSuccess(resource.value)
+        is Resource.Error -> showError(resource.t)
+    }
+
+    private fun showLoading() {
+        binding.loading.isVisible = true
+    }
+
+    private fun showSuccess(topics: List<TopicJson>) {
+        binding.loading.isVisible = false
+        adapter.submitList(topics)
+    }
+
+    private fun showError(t: Throwable) {
+        binding.loading.isVisible = false
+        Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
     }
 
     private class HomeAdapter : ListAdapter<TopicJson, HomeViewHolder>(DIFF_CALLBACK) {

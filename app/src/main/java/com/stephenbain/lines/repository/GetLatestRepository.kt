@@ -10,7 +10,7 @@ class GetLatestRepository @Inject constructor(private val apiService: LinesApiSe
 
     fun getLatestTopics(): Flow<List<TopicJson>> {
         return flow {
-            emit(apiService.getLatest().topic_list.topics)
+            emit(apiService.getLatest().topicList.topics)
         }
     }
 

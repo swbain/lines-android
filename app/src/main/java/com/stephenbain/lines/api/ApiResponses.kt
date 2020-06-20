@@ -1,9 +1,10 @@
 package com.stephenbain.lines.api
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GetLatestApiResponse(val topic_list: TopicList)
+data class GetLatestApiResponse(@Json(name = "topic_list") val topicList: TopicList)
 
 @JsonClass(generateAdapter = true)
 data class TopicList(val topics: List<TopicJson>)

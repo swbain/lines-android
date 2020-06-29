@@ -25,6 +25,7 @@ import com.stephenbain.lines.databinding.FragmentHomeBinding
 import com.stephenbain.lines.databinding.ListItemDividerBinding
 import com.stephenbain.lines.databinding.ListItemTopicBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.list_item_loading.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -44,6 +45,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
 
+    private var initialLoad = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,11 +59,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recycler.adapter = adapter.withLoadStateHeaderAndFooter(
-            header = HomeLoadStateAdapter(),
-            footer = HomeLoadStateAdapter()
+            header = HomeLoadStateAdapter(adapter::retry),
+            footer = HomeLoadStateAdapter(adapter::retry)
         )
 
-        binding.retry.setOnClickListener { adapter.retry() }
+        binding.retry.setOnClickListener {
+            initialLoad = true
+            adapter.retry()
+        }
+        binding.swipeRefresh.setOnRefreshListener { adapter.refresh() }
 
         binding.recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
@@ -70,8 +77,22 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest {
-                binding.loading.isVisible = it.refresh is LoadState.Loading
-                binding.retry.isVisible = it.refresh is LoadState.Error
+                Timber.d("load state = %s", it.refresh::class.simpleName)
+                val isLoading = it.refresh is LoadState.Loading
+                val isError = it.refresh is LoadState.Error
+
+                binding.loading.isVisible = isLoading && initialLoad
+                if (!isLoading) {
+                    binding.swipeRefresh.isRefreshing = false
+                }
+
+
+                binding.retry.isVisible = isError
+                binding.recycler.isVisible = (isLoading && !initialLoad) || it.refresh is LoadState.NotLoading
+
+                if (initialLoad && isLoading) {
+                    initialLoad = false
+                }
             }
         }
     }

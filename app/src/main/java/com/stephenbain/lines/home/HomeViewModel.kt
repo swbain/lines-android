@@ -3,6 +3,7 @@ package com.stephenbain.lines.home
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.*
+import com.stephenbain.lines.api.LinesApiService
 import com.stephenbain.lines.api.Topic
 import com.stephenbain.lines.repository.getlatest.GetLatestApiPagingSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,9 +12,11 @@ import kotlinx.coroutines.flow.map
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class HomeViewModel @ViewModelInject constructor(pagingSource: GetLatestApiPagingSource) : ViewModel() {
+class HomeViewModel @ViewModelInject constructor(api: LinesApiService) : ViewModel() {
 
-    private val pager = Pager(config = PagingConfig(pageSize = 30, prefetchDistance = 5)) { pagingSource }
+    private val pager = Pager(config = PagingConfig(pageSize = 30, prefetchDistance = 15)) {
+        GetLatestApiPagingSource(api)
+    }
 
     val data = pager.flow.map { createUiModel(it) }.cachedIn(viewModelScope)
 

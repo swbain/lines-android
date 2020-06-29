@@ -1,13 +1,13 @@
 package com.stephenbain.lines.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.stephenbain.lines.R
-import com.stephenbain.lines.databinding.ListItemDividerBinding
 import com.stephenbain.lines.databinding.ListItemTopicBinding
 
 class HomeUiModelAdapter :
@@ -21,20 +21,8 @@ class HomeUiModelAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder =
         when (viewType) {
-            R.layout.list_item_topic -> HomeViewHolder.TopicViewHolder(
-                ListItemTopicBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-            else -> HomeViewHolder.SeparatorViewHolder(
-                ListItemDividerBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
+            R.layout.list_item_topic -> HomeViewHolder.TopicViewHolder(parent)
+            else -> HomeViewHolder.SeparatorViewHolder(parent)
         }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
@@ -64,12 +52,23 @@ object HomeUiModelComparator : DiffUtil.ItemCallback<HomeItemUiModel>() {
 
 }
 
-sealed class HomeViewHolder(viewBinding: ViewBinding) : RecyclerView.ViewHolder(viewBinding.root) {
-    class TopicViewHolder(private val binding: ListItemTopicBinding) : HomeViewHolder(binding) {
+sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup)
+    : RecyclerView.ViewHolder(inflateLayout(resId, parent)) {
+
+    class TopicViewHolder(parent: ViewGroup) : HomeViewHolder(R.layout.list_item_topic, parent) {
+
+        private val binding = ListItemTopicBinding.bind(itemView)
+
         fun bind(item: HomeItemUiModel.TopicItem) {
             binding.title.text = item.topic.title
         }
     }
 
-    class SeparatorViewHolder(binding: ListItemDividerBinding) : HomeViewHolder(binding)
+    class SeparatorViewHolder(parent: ViewGroup) : HomeViewHolder(R.layout.list_item_divider, parent)
+
+    companion object {
+        private fun inflateLayout(@LayoutRes resId: Int, parent: ViewGroup): View {
+            return LayoutInflater.from(parent.context).inflate(resId, parent, false)
+        }
+    }
 }

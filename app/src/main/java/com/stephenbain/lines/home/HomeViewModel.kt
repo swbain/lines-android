@@ -29,7 +29,7 @@ class HomeViewModel @ViewModelInject constructor(
     private val selectedCategory = ConflatedBroadcastChannel<CategoryItem>(CategoryItem.AllCategories)
 
     val data = selectedCategory.asFlow().distinctUntilChanged().flatMapLatest { category ->
-        topicsRepository.getTopics(category).map { createUiModel(it) }
+        topicsRepository.getTopics(category).map { createUiModel(it, category) }
     }.asLiveData(viewModelScope.coroutineContext)
 
     val categories = categoriesRepository.getCategories().asLiveData(viewModelScope.coroutineContext)
@@ -38,8 +38,8 @@ class HomeViewModel @ViewModelInject constructor(
         selectedCategory.send(category)
     }
 
-    private fun createUiModel(pagingData: PagingData<Topic>): PagingData<HomeItemUiModel> {
-        return pagingData.map { HomeItemUiModel.TopicItem(it) }
+    private fun createUiModel(pagingData: PagingData<Topic>, category: CategoryItem): PagingData<HomeItemUiModel> {
+        return pagingData.map { HomeItemUiModel.TopicItem(it, category) }
             .insertSeparators { _, _ -> HomeItemUiModel.Separator }
     }
 
@@ -47,6 +47,6 @@ class HomeViewModel @ViewModelInject constructor(
 
 // may add more customized separator later
 sealed class HomeItemUiModel {
-    data class TopicItem(val topic: Topic) : HomeItemUiModel()
+    data class TopicItem(val topic: Topic, val category: CategoryItem) : HomeItemUiModel()
     object Separator : HomeItemUiModel()
 }

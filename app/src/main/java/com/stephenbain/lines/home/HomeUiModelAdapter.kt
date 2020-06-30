@@ -38,6 +38,7 @@ object HomeUiModelComparator : DiffUtil.ItemCallback<HomeItemUiModel>() {
         val isSameTopicItem = oldItem is HomeItemUiModel.TopicItem
                 && newItem is HomeItemUiModel.TopicItem
                 && oldItem.topic.id == newItem.topic.id
+                && oldItem.category == newItem.category
 
         val isSameSeparatorItem = oldItem is HomeItemUiModel.Separator
                 && newItem is HomeItemUiModel.Separator

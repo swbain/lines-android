@@ -47,8 +47,3 @@ private class GetLatestApiPagingSource(
         }
     }
 }
-
-sealed class CategoryItem {
-    object AllCategories : CategoryItem()
-    data class SelectedCategory(val category: Category) : CategoryItem()
-}

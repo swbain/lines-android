@@ -9,17 +9,16 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
+import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.stephenbain.lines.MainActivity
@@ -32,6 +31,7 @@ import com.stephenbain.lines.databinding.*
 import com.stephenbain.lines.repository.CategoryItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.list_item_loading.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -67,7 +67,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecycler()
         setUpLoading()
-        viewModel.data.observe(viewLifecycleOwner) { adapter.submitData(lifecycle, it) }
+        viewModel.data.observe(viewLifecycleOwner) {
+            adapter.submitData(lifecycle, it)
+        }
         viewModel.categories.observe(viewLifecycleOwner) { setUpToolbar(it)  }
     }
 

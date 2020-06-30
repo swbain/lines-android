@@ -16,5 +16,9 @@ class CategoriesRepository @Inject constructor(private val api: LinesApiService)
         }
         emit(items)
     }
+}
 
+sealed class CategoryItem {
+    object AllCategories : CategoryItem()
+    data class SelectedCategory(val category: Category) : CategoryItem()
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">llllllll</string>
     <string name="error_loading_data">Error loading data: Retry</string>
+    <string name="categories">Categories</string>
 </resources>

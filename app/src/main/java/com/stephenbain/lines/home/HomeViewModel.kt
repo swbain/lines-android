@@ -7,36 +7,19 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import com.stephenbain.lines.api.Topic
-import com.stephenbain.lines.repository.CategoriesRepository
 import com.stephenbain.lines.repository.CategoryItem
 import com.stephenbain.lines.repository.GetLatestTopicsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class HomeViewModel @ViewModelInject constructor(
-    categoriesRepository: CategoriesRepository,
-    topicsRepository: GetLatestTopicsRepository
-) : ViewModel() {
+class HomeViewModel @ViewModelInject constructor(topicsRepository: GetLatestTopicsRepository) : ViewModel() {
 
-    private val selectedCategory = ConflatedBroadcastChannel<CategoryItem>(CategoryItem.AllCategories)
-
-    val data = selectedCategory.asFlow().distinctUntilChanged().flatMapLatest { category ->
-        topicsRepository.getTopics(category).map { createUiModel(it, category) }
-    }.asLiveData(viewModelScope.coroutineContext)
-
-    val categories = categoriesRepository.getCategories().asLiveData(viewModelScope.coroutineContext)
-
-    fun setSelectedCategory(category: CategoryItem) = viewModelScope.launch {
-        selectedCategory.send(category)
-    }
+    val data = topicsRepository.getTopics(CategoryItem.AllCategories)
+        .map { createUiModel(it, CategoryItem.AllCategories) }
+        .asLiveData(viewModelScope.coroutineContext)
 
     private fun createUiModel(pagingData: PagingData<Topic>, category: CategoryItem): PagingData<HomeItemUiModel> {
         return pagingData.map { HomeItemUiModel.TopicItem(it, category) }

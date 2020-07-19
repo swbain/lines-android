@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.stephenbain.lines.databinding.FragmentHomeBinding
+import com.stephenbain.lines.databinding.FragmentPostsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -20,12 +20,12 @@ import kotlinx.coroutines.flow.collectLatest
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class PostsFragment : Fragment() {
 
     private val viewModel by viewModels<HomeViewModel>()
     private val adapter = HomeUiModelAdapter()
 
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentPostsBinding
 
     private var initialLoad = true
 
@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = FragmentPostsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

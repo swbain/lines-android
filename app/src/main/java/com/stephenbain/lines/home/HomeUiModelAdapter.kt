@@ -19,15 +19,12 @@ class HomeUiModelAdapter :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder =
-        when (viewType) {
-            R.layout.list_item_topic -> HomeViewHolder.TopicViewHolder(parent)
-            else -> HomeViewHolder.SeparatorViewHolder(parent)
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
+        return HomeViewHolder.TopicViewHolder(parent)
+    }
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
         is HomeItemUiModel.TopicItem -> R.layout.list_item_topic
-        HomeItemUiModel.Separator -> R.layout.list_item_divider
         null -> throw IllegalStateException("Unknown view")
     }
 
@@ -35,15 +32,10 @@ class HomeUiModelAdapter :
 
 object HomeUiModelComparator : DiffUtil.ItemCallback<HomeItemUiModel>() {
     override fun areItemsTheSame(oldItem: HomeItemUiModel, newItem: HomeItemUiModel): Boolean {
-        val isSameTopicItem = oldItem is HomeItemUiModel.TopicItem
+        return oldItem is HomeItemUiModel.TopicItem
                 && newItem is HomeItemUiModel.TopicItem
                 && oldItem.topic.id == newItem.topic.id
                 && oldItem.category == newItem.category
-
-        val isSameSeparatorItem = oldItem is HomeItemUiModel.Separator
-                && newItem is HomeItemUiModel.Separator
-
-        return isSameTopicItem || isSameSeparatorItem
     }
 
     override fun areContentsTheSame(
@@ -64,8 +56,6 @@ sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup)
             binding.title.text = item.topic.title
         }
     }
-
-    class SeparatorViewHolder(parent: ViewGroup) : HomeViewHolder(R.layout.list_item_divider, parent)
 
     companion object {
         private fun inflateLayout(@LayoutRes resId: Int, parent: ViewGroup): View {

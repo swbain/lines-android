@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stephenbain.lines.databinding.FragmentPostsBinding
@@ -16,7 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@ExperimentalPagingApi
 @FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -57,7 +60,13 @@ class PostsFragment : Fragment() {
             initialLoad = true
             adapter.retry()
         }
-        binding.swipeRefresh.setOnRefreshListener { adapter.refresh() }
+        binding.swipeRefresh.setOnRefreshListener {
+            adapter.refresh()
+        }
+
+        lifecycleScope.launch {
+            adapter.dataRefreshFlow.collectLatest { binding.recycler.scrollToPosition(0) }
+        }
 
         binding.recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }

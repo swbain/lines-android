@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.insertSeparators
 import com.stephenbain.lines.api.Topic
 import com.stephenbain.lines.repository.CategoryItem
 import com.stephenbain.lines.repository.GetLatestTopicsRepository
@@ -23,7 +22,6 @@ class HomeViewModel @ViewModelInject constructor(topicsRepository: GetLatestTopi
 
     private fun createUiModel(pagingData: PagingData<Topic>, category: CategoryItem): PagingData<HomeItemUiModel> {
         return pagingData.map { HomeItemUiModel.TopicItem(it, category) }
-            .insertSeparators { _, _ -> HomeItemUiModel.Separator }
     }
 
 }
@@ -31,5 +29,4 @@ class HomeViewModel @ViewModelInject constructor(topicsRepository: GetLatestTopi
 // may add more customized separator later
 sealed class HomeItemUiModel {
     data class TopicItem(val topic: Topic, val category: CategoryItem) : HomeItemUiModel()
-    object Separator : HomeItemUiModel()
 }

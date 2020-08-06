@@ -2,26 +2,28 @@ package com.stephenbain.lines.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.PagingSource
-import com.stephenbain.lines.api.Category
-import com.stephenbain.lines.api.LinesApiService
-import com.stephenbain.lines.api.Topic
-import com.stephenbain.lines.api.getLatestForCategory
+import com.stephenbain.lines.api.*
+import com.stephenbain.lines.common.toHashMap
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
 class GetLatestTopicsRepository @Inject constructor(private val api: LinesApiService) {
 
-    fun getTopics(categoryItem: CategoryItem) = Pager(config = PagingConfig(pageSize = 30, prefetchDistance = 5)) {
-        GetLatestApiPagingSource(api, categoryItem)
-    }.flow
+    fun getTopics(categoryItem: CategoryItem): Flow<PagingData<TopicWithUsers>> {
+        return Pager(config = PagingConfig(pageSize = 30, prefetchDistance = 5)) {
+            GetLatestApiPagingSource(api, categoryItem)
+        }.flow
+    }
 }
 
 private class GetLatestApiPagingSource(
     private val api: LinesApiService,
     private val categoryItem: CategoryItem
-) : PagingSource<Int, Topic>() {
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Topic> {
+) : PagingSource<Int, TopicWithUsers>() {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TopicWithUsers> {
         return try {
             val pageNumber = params.key ?: 0
 
@@ -37,7 +39,7 @@ private class GetLatestApiPagingSource(
             val hasNext = response.topicList.topics.isNotEmpty() && response.topicList.moreTopicsUrl != null
             val nextKey = if (hasNext) pageNumber + 1 else null
             LoadResult.Page(
-                data = response.topicList.topics,
+                data = response.toTopicsWithUsers(),
                 prevKey = prevKey,
                 nextKey = nextKey
             )
@@ -46,4 +48,18 @@ private class GetLatestApiPagingSource(
             LoadResult.Error(t)
         }
     }
+
+    private fun GetLatestApiResponse.toTopicsWithUsers(): List<TopicWithUsers> {
+        val allUsers = users.toHashMap { it.id }
+        return topicList.topics.map { it.withUsers(allUsers) }
+    }
+
+    private fun TopicJson.withUsers(allUsers: Map<Long, User>): TopicWithUsers {
+        return TopicWithUsers(
+            topic = this,
+            users = posters.mapNotNull { allUsers[it.userId] }
+        )
+    }
 }
+
+data class TopicWithUsers(val topic: TopicJson, val users: List<User>) : Topic by topic

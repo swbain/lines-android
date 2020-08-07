@@ -14,9 +14,11 @@ object ApiModule {
     @Provides
     fun provideLinesApiService(): LinesApiService {
 
-        return Retrofit.Builder().baseUrl("https://llllllll.co")
+        return Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create()
     }
 }
+
+const val BASE_URL = "https://llllllll.co"

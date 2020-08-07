@@ -62,4 +62,4 @@ private class GetLatestApiPagingSource(
     }
 }
 
-data class TopicWithUsers(val topic: TopicJson, val users: List<User>) : Topic by topic
+data class TopicWithUsers(private val topic: TopicJson, val users: List<User>) : Topic by topic

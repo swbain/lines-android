@@ -12,12 +12,14 @@ import androidx.lifecycle.observe
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 import com.stephenbain.lines.databinding.FragmentPostsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @ExperimentalPagingApi
 @FlowPreview
@@ -26,7 +28,10 @@ import kotlinx.coroutines.launch
 class PostsFragment : Fragment() {
 
     private val viewModel by viewModels<HomeViewModel>()
-    private val adapter = HomeUiModelAdapter()
+
+    private val picasso = Picasso.get()
+
+    private val adapter = HomeUiModelAdapter(picasso)
 
     private lateinit var binding: FragmentPostsBinding
 

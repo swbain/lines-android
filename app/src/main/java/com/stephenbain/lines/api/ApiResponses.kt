@@ -49,3 +49,7 @@ data class User(
     val name: String?,
     @Json(name = "avatar_template") val avatarTemplate: String
 )
+
+fun User.avatarUrl(size: Int): String {
+    return "$BASE_URL${avatarTemplate.replace("{size}", "$size")}"
+}

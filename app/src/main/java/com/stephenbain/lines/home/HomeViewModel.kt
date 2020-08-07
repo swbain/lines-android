@@ -17,16 +17,16 @@ import kotlinx.coroutines.flow.map
 class HomeViewModel @ViewModelInject constructor(topicsRepository: GetLatestTopicsRepository) : ViewModel() {
 
     val data = topicsRepository.getTopics(CategoryItem.AllCategories)
-        .map { createUiModel(it, CategoryItem.AllCategories) }
+        .map { createUiModel(it) }
         .asLiveData(viewModelScope.coroutineContext)
 
-    private fun createUiModel(pagingData: PagingData<TopicWithUsers>, category: CategoryItem): PagingData<HomeItemUiModel> {
-        return pagingData.map { HomeItemUiModel.TopicItem(it, category) }
+    private fun createUiModel(pagingData: PagingData<TopicWithUsers>): PagingData<HomeItemUiModel> {
+        return pagingData.map { HomeItemUiModel.TopicItem(it) }
     }
 
 }
 
 // may add more customized separator later
 sealed class HomeItemUiModel {
-    data class TopicItem(val topic: TopicWithUsers, val category: CategoryItem) : HomeItemUiModel()
+    data class TopicItem(val topic: TopicWithUsers) : HomeItemUiModel()
 }

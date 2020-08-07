@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.stephenbain.lines.repository.CategoryItem
 import com.stephenbain.lines.repository.GetLatestTopicsRepository
 import com.stephenbain.lines.repository.TopicWithUsers

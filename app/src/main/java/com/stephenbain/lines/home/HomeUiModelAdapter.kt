@@ -3,15 +3,18 @@ package com.stephenbain.lines.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.core.view.doOnLayout
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.stephenbain.lines.R
+import com.stephenbain.lines.api.User
 import com.stephenbain.lines.api.avatarUrl
 import com.stephenbain.lines.common.CircularTransformation
 import com.stephenbain.lines.databinding.ListItemTopicBinding
@@ -71,16 +74,27 @@ sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup) :
 
             imageViews.forEachIndexed { index, imageView ->
                 if (index < item.topic.users.size) {
-                    imageView.doOnLayout {
-                        picasso.load(item.topic.users[index].avatarUrl(it.measuredWidth))
-                            .transform(CircularTransformation())
-                            .into(imageView)
-                    }
+                    loadImage(imageView, item.topic.users[index])
                     imageView.isVisible = true
                 } else {
                     imageView.isVisible = false
                 }
             }
+        }
+
+        private fun loadImage(imageView: ImageView, user: User) {
+            if (imageView.measuredWidth == 0) {
+                imageView.doOnLayout {
+                    loadImage(imageView, user, imageView.measuredWidth)
+                }
+            } else loadImage(imageView, user, imageView.measuredWidth)
+        }
+
+        private fun loadImage(imageView: ImageView, user: User, size: Int) {
+            picasso.load(user.avatarUrl(size))
+                .transform(CircularTransformation())
+                .tag(user)
+                .into(imageView)
         }
     }
 

@@ -19,7 +19,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @ExperimentalPagingApi
 @FlowPreview
@@ -34,8 +33,6 @@ class PostsFragment : Fragment() {
     private val adapter = HomeUiModelAdapter(picasso)
 
     private lateinit var binding: FragmentPostsBinding
-
-    private var initialLoad = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +59,6 @@ class PostsFragment : Fragment() {
         )
 
         binding.retry.setOnClickListener {
-            initialLoad = true
             adapter.retry()
         }
         binding.swipeRefresh.setOnRefreshListener {
@@ -78,21 +74,18 @@ class PostsFragment : Fragment() {
 
     private fun setUpLoading() = lifecycleScope.launchWhenCreated {
         adapter.loadStateFlow.collectLatest {
-            val isLoading = it.refresh is LoadState.Loading
+            val isRefreshing = it.refresh is LoadState.Loading
             val isError = it.refresh is LoadState.Error
 
-            binding.loading.isVisible = isLoading && initialLoad
-            if (!isLoading) {
+
+            binding.loading.isVisible = isRefreshing
+            if (!isRefreshing) {
                 binding.swipeRefresh.isRefreshing = false
             }
 
 
             binding.retry.isVisible = isError
-            binding.recycler.isVisible = (isLoading && !initialLoad) || it.refresh is LoadState.NotLoading
-
-            if (initialLoad && isLoading) {
-                initialLoad = false
-            }
+            binding.recycler.isVisible = (isRefreshing) || it.refresh is LoadState.NotLoading
         }
     }
 }

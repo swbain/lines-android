@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#ab2309</color>
     <color name="colorAccent">#6cf</color>
     <color name="colorOnSurface">#15000000</color>
+    <color name="bg">#11000000</color>
 </resources>

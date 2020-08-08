@@ -19,7 +19,6 @@ import com.stephenbain.lines.common.CircularTransformation
 import com.stephenbain.lines.databinding.ListItemTopicBinding
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import kotlin.math.round
 
 class HomeUiModelAdapter(private val picasso: Picasso) :
     PagingDataAdapter<HomeItemUiModel, HomeViewHolder>(HomeUiModelComparator) {
@@ -73,11 +72,23 @@ sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup) :
 
         fun bind(item: HomeItemUiModel.TopicItem) {
             binding.title.text = item.topic.title
-            binding.subtitle.text = itemView.context.resources.getQuantityString(
-                R.plurals.topic_item_subtitle,
+
+            val replies = itemView.context.resources.getQuantityString(
+                R.plurals.replies_label,
                 item.topic.postCount - 1,
-                (item.topic.postCount - 1).toFormattedString()
+                (item.topic.postCount - 1).toFormattedCount()
             )
+            val views = itemView.context.resources.getQuantityString(
+                R.plurals.views_label,
+                item.topic.views,
+                item.topic.views.toFormattedCount()
+            )
+
+            binding.subtitle.text = itemView.context.resources.getString(
+                R.string.topic_card_subtitle,
+                replies, views
+            )
+
             if (item.topic.category != null) {
                 binding.category.text = item.topic.category.name
                 val bgColor = Color.parseColor( "#${item.topic.category.color}")
@@ -113,7 +124,7 @@ sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup) :
                 .into(imageView)
         }
 
-        private fun Int.toFormattedString(): String {
+        private fun Int.toFormattedCount(): String {
             return when {
                 this < 1000 -> toString()
                 this % 1000 == 0 -> "${this / 1000}k"

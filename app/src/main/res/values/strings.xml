@@ -2,8 +2,15 @@
     <string name="app_name">llllllll</string>
     <string name="error_loading_data">Error loading data: Retry</string>
     <string name="categories">Categories</string>
-    <plurals name="topic_item_subtitle">
+    <string name="topic_card_subtitle">%s, %s</string>
+
+    <plurals name="replies_label">
         <item quantity="one">%s reply</item>
         <item quantity="other">%s replies</item>
+    </plurals>
+
+    <plurals name="views_label">
+        <item quantity="one">%s view</item>
+        <item quantity="other">%s views</item>
     </plurals>
 </resources>

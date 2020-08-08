@@ -1,5 +1,6 @@
 package com.stephenbain.lines.home
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +72,17 @@ sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup) :
 
         fun bind(item: HomeItemUiModel.TopicItem) {
             binding.title.text = item.topic.title
+            if (item.topic.category != null) {
+                binding.category.text = item.topic.category.name
+                val bgColor = Color.parseColor( "#${item.topic.category.color}")
+                binding.categoryColor.setBackgroundColor(bgColor)
+
+                binding.category.isVisible = true
+                binding.categoryColor.isVisible = true
+            } else {
+                binding.category.isVisible = false
+                binding.categoryColor.isVisible = false
+            }
 
             imageViews.forEachIndexed { index, imageView ->
                 if (index < item.topic.users.size) {

@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.core.view.doOnLayout
-import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -19,6 +17,9 @@ import com.stephenbain.lines.api.User
 import com.stephenbain.lines.api.avatarUrl
 import com.stephenbain.lines.common.CircularTransformation
 import com.stephenbain.lines.databinding.ListItemTopicBinding
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import kotlin.math.round
 
 class HomeUiModelAdapter(private val picasso: Picasso) :
     PagingDataAdapter<HomeItemUiModel, HomeViewHolder>(HomeUiModelComparator) {
@@ -74,19 +75,17 @@ sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup) :
             binding.title.text = item.topic.title
             binding.subtitle.text = itemView.context.resources.getQuantityString(
                 R.plurals.topic_item_subtitle,
-                item.topic.replyCount,
-                item.topic.replyCount
+                item.topic.postCount - 1,
+                (item.topic.postCount - 1).toFormattedString()
             )
             if (item.topic.category != null) {
                 binding.category.text = item.topic.category.name
                 val bgColor = Color.parseColor( "#${item.topic.category.color}")
                 binding.categoryColor.setBackgroundColor(bgColor)
 
-                binding.category.isVisible = true
-                binding.categoryColor.isVisible = true
+                binding.categoryGroup.isVisible = true
             } else {
-                binding.category.isVisible = false
-                binding.categoryColor.isVisible = false
+                binding.categoryGroup.isVisible = false
             }
 
             imageViews.forEachIndexed { index, imageView ->
@@ -112,6 +111,18 @@ sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup) :
                 .transform(CircularTransformation())
                 .tag(user)
                 .into(imageView)
+        }
+
+        private fun Int.toFormattedString(): String {
+            return when {
+                this < 1000 -> toString()
+                this % 1000 == 0 -> "${this / 1000}k"
+                else -> {
+                    val df = DecimalFormat("#.#")
+                    df.roundingMode = RoundingMode.HALF_EVEN
+                    "${df.format(toFloat() / 1000F)}k".replace(".0", "")
+                }
+            }
         }
     }
 

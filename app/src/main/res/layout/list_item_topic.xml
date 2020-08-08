@@ -32,12 +32,17 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Caption"
-            android:textStyle="italic"
             app:layout_constraintBottom_toTopOf="@+id/title"
             app:layout_constraintStart_toEndOf="@+id/categoryColor"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="category" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/categoryGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="categoryColor, category"/>
 
         <TextView
             android:id="@+id/title"
@@ -47,6 +52,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
+            app:layout_goneMarginTop="24dp"
             android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"
             app:layout_constraintBottom_toTopOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"

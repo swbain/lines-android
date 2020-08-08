@@ -3,7 +3,7 @@
     <string name="error_loading_data">Error loading data: Retry</string>
     <string name="categories">Categories</string>
     <plurals name="topic_item_subtitle">
-        <item quantity="one">%d reply</item>
-        <item quantity="other">%d replies</item>
+        <item quantity="one">%s reply</item>
+        <item quantity="other">%s replies</item>
     </plurals>
 </resources>

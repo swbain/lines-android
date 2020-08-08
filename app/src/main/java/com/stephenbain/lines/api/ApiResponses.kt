@@ -20,7 +20,7 @@ interface Topic {
     val title: String
     val categoryId: Long
     val posters: List<Poster>
-    val replyCount: Int
+    val postCount: Int
 }
 
 @JsonClass(generateAdapter = true)
@@ -32,7 +32,7 @@ data class TopicJson(
     override val title: String,
     @Json(name = "category_id") override val categoryId: Long,
     override val posters: List<Poster>,
-    @Json(name = "reply_count") override val replyCount: Int
+    @Json(name = "posts_count") override val postCount: Int
 ) : Topic
 
 @JsonClass(generateAdapter = true)

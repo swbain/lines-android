@@ -72,6 +72,11 @@ sealed class HomeViewHolder(@LayoutRes resId: Int, parent: ViewGroup) :
 
         fun bind(item: HomeItemUiModel.TopicItem) {
             binding.title.text = item.topic.title
+            binding.subtitle.text = itemView.context.resources.getQuantityString(
+                R.plurals.topic_item_subtitle,
+                item.topic.replyCount,
+                item.topic.replyCount
+            )
             if (item.topic.category != null) {
                 binding.category.text = item.topic.category.name
                 val bgColor = Color.parseColor( "#${item.topic.category.color}")

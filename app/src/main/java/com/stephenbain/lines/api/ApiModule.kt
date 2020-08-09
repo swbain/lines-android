@@ -1,5 +1,6 @@
 package com.stephenbain.lines.api
 
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,12 +13,17 @@ import retrofit2.create
 @InstallIn(ActivityComponent::class)
 object ApiModule {
     @Provides
-    fun provideLinesApiService(): LinesApiService {
+    fun provideLinesApiService(moshi: Moshi): LinesApiService {
 
         return Retrofit.Builder().baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create()
+    }
+
+    @Provides
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().add(TopicJsonAdapter()).build()
     }
 }
 

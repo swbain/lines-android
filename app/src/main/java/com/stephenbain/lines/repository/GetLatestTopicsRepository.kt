@@ -65,7 +65,7 @@ private class GetLatestApiPagingSource(
         return topicList.topics.map { it.withUsers(allUsers) }
     }
 
-    private fun TopicJson.withUsers(allUsers: Map<Long, User>): TopicWithUsersAndCategory {
+    private fun Topic.withUsers(allUsers: Map<Long, User>): TopicWithUsersAndCategory {
         return TopicWithUsersAndCategory(
             topic = this,
             users = posters.mapNotNull { allUsers[it.userId] },
@@ -75,7 +75,7 @@ private class GetLatestApiPagingSource(
 }
 
 data class TopicWithUsersAndCategory(
-    private val topic: TopicJson,
+    private val topic: Topic,
     val users: List<User>,
     val category: Category?
 ) : Topic by topic

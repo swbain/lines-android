@@ -15,19 +15,16 @@ import kotlinx.coroutines.flow.map
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class HomeViewModel @ViewModelInject constructor(topicsRepository: GetLatestTopicsRepository) : ViewModel() {
+class HomeViewModel @ViewModelInject constructor(
+    topicsRepository: GetLatestTopicsRepository,
+    private val topicToUiModel: TopicToUiModel
+) : ViewModel() {
 
     val data = topicsRepository.getTopics(CategoryItem.AllCategories)
         .map { createUiModel(it) }
         .asLiveData(viewModelScope.coroutineContext)
 
-    private fun createUiModel(pagingData: PagingData<TopicWithUsersAndCategory>): PagingData<HomeItemUiModel> {
-        return pagingData.map { HomeItemUiModel.TopicItem(it) }
+    private fun createUiModel(pagingData: PagingData<TopicWithUsersAndCategory>): PagingData<TopicCardUiModel> {
+        return pagingData.map { topicToUiModel(it) }
     }
-
-}
-
-// may add more customized separator later
-sealed class HomeItemUiModel {
-    data class TopicItem(val topic: TopicWithUsersAndCategory) : HomeItemUiModel()
 }

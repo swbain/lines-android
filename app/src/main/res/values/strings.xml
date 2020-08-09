@@ -3,6 +3,7 @@
     <string name="error_loading_data">Error loading data: Retry</string>
     <string name="categories">Categories</string>
     <string name="topic_card_subtitle">%s, %s, %s</string>
+    <string name="user_avatar">user avatar</string>
 
     <plurals name="replies_label">
         <item quantity="one">%s reply</item>

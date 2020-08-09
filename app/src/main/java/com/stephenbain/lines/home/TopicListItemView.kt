@@ -19,6 +19,11 @@ class TopicListItemView(private val binding: ListItemTopicBinding, private val p
         binding.imageView5
     )
 
+    init {
+        binding.subtitle.setInAnimation(binding.subtitle.context, android.R.anim.fade_in)
+        binding.subtitle.setOutAnimation(binding.subtitle.context, android.R.anim.fade_out)
+    }
+
     fun setItem(item: TopicCardUiModel) {
         binding.title.text = item.title
 
@@ -49,7 +54,7 @@ class TopicListItemView(private val binding: ListItemTopicBinding, private val p
     }
 
     fun updateSubtitle(subtitle: String) {
-        binding.subtitle.text = subtitle
+        binding.subtitle.setText(subtitle)
     }
 
     private fun loadImage(imageView: ImageView, avatarTemplate: String) {

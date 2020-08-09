@@ -13,6 +13,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 interface ApplicationContextModule {
     @Binds
     fun bindAppContext(
-        @dagger.hilt.android.qualifiers.ApplicationContext context: Context) :
+        @ApplicationContext context: Context) :
             Context
 }

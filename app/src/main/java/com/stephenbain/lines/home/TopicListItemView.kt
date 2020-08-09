@@ -22,7 +22,7 @@ class TopicListItemView(private val binding: ListItemTopicBinding, private val p
     fun setItem(item: TopicCardUiModel) {
         binding.title.text = item.title
 
-        binding.subtitle.text = item.subtitle
+        updateSubtitle(item.subtitle)
 
         if (item.categoryLabel != null) {
             binding.category.text = item.categoryLabel.name
@@ -34,14 +34,22 @@ class TopicListItemView(private val binding: ListItemTopicBinding, private val p
             binding.categoryGroup.isVisible = false
         }
 
+        loadImages(item.userImageUrlTemplates)
+    }
+
+    fun loadImages(imageTemplates: List<String>) {
         imageViews.forEachIndexed { index, imageView ->
-            if (index < item.userImageUrlTemplates.size) {
-                loadImage(imageView, item.userImageUrlTemplates[index])
+            if (index < imageTemplates.size) {
+                loadImage(imageView, imageTemplates[index])
                 imageView.isVisible = true
             } else {
                 imageView.isVisible = false
             }
         }
+    }
+
+    fun updateSubtitle(subtitle: String) {
+        binding.subtitle.text = subtitle
     }
 
     private fun loadImage(imageView: ImageView, avatarTemplate: String) {

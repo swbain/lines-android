@@ -77,15 +77,11 @@ class PostsFragment : Fragment() {
             val isRefreshing = it.refresh is LoadState.Loading
             val isError = it.refresh is LoadState.Error
 
-
-            binding.loading.isVisible = isRefreshing
             if (!isRefreshing) {
                 binding.swipeRefresh.isRefreshing = false
             }
 
-
             binding.retry.isVisible = isError
-            binding.recycler.isVisible = (isRefreshing) || it.refresh is LoadState.NotLoading
         }
     }
 }

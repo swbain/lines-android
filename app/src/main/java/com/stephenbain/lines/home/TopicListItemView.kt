@@ -27,7 +27,7 @@ class TopicListItemView(private val binding: ListItemTopicBinding, private val p
     fun setItem(item: TopicCardUiModel) {
         binding.title.text = item.title
 
-        updateSubtitle(item.subtitle)
+        binding.subtitle.setCurrentText(item.subtitle)
 
         if (item.categoryLabel != null) {
             binding.category.text = item.categoryLabel.name

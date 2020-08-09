@@ -121,7 +121,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/title"
             app:layout_constraintStart_toStartOf="@+id/imageView"
-            tools:text="5 replies, 2k views, last updated 3h ago">
+            tools:text="5 replies, 2k views, last updated 3h ago"
+            android:inAnimation="@android:anim/fade_in"
+            android:outAnimation="@android:anim/fade_out">
 
             <TextView
                 android:layout_width="match_parent"

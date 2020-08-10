@@ -12,8 +12,7 @@ import com.stephenbain.lines.databinding.ListItemTopicBinding
 class HomeUiModelAdapter(private val picasso: Picasso) :
     PagingDataAdapter<TopicCardUiModel, TopicViewHolder>(HomeUiModelComparator) {
     override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {
-        val item = getItem(position)
-        item?.let(holder::bind)
+            getItem(position)?.let(holder::bind)
     }
 
     override fun onBindViewHolder(

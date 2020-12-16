@@ -12,16 +12,15 @@ import javax.inject.Inject
 
 class GetLatestTopicsRepository @Inject constructor(private val api: LinesApiService) {
 
-    fun getTopics(categoryItem: CategoryItem): Flow<PagingData<TopicWithUsersAndCategory>> {
+    fun getTopics(): Flow<PagingData<TopicWithUsersAndCategory>> {
         return Pager(config = PagingConfig(pageSize = 30, prefetchDistance = 5)) {
-            GetLatestApiPagingSource(api, categoryItem)
+            GetLatestApiPagingSource(api)
         }.flow
     }
 }
 
 private class GetLatestApiPagingSource(
-    private val api: LinesApiService,
-    private val categoryItem: CategoryItem
+    private val api: LinesApiService
 ) : PagingSource<Int, TopicWithUsersAndCategory>() {
 
     var categories = emptyMap<Long, Category>()
@@ -38,13 +37,7 @@ private class GetLatestApiPagingSource(
                 }
             }
 
-            val response = when (categoryItem) {
-                CategoryItem.AllCategories -> api.getLatest(page = pageNumber)
-                is CategoryItem.SelectedCategory -> api.getLatestForCategory(
-                    category = categoryItem.category,
-                    page = pageNumber
-                )
-            }
+            val response = api.getLatest(page = pageNumber)
 
             val prevKey = if (pageNumber > 0) pageNumber - 1 else null
             val hasNext = response.topicList.topics.isNotEmpty() && response.topicList.moreTopicsUrl != null

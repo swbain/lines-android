@@ -19,7 +19,7 @@ fun <T> Flow<T>.toResource(): Flow<Resource<T>> {
         try {
             emitAll(map { Resource.Success(it) })
         } catch (t: Throwable) {
-            emit(Resource.Error(t))
+            emit(Resource.Error<T>(t))
         }
 
     }

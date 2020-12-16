@@ -11,27 +11,34 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-data class TopicCardUiModel(
-    val id: Long,
-    val title: String,
-    val userImageUrlTemplates: List<String>,
-    val subtitle: String,
-    val categoryLabel: CategoryLabel?
-)
+sealed class TopicListItemUiModel {
+    data class TopicCard(
+        val id: Long,
+        val title: String,
+        val userImageUrlTemplates: List<String>,
+        val subtitle: String,
+        val categoryLabel: CategoryLabel?,
+        val lastPostedAt: Date
+    ) : TopicListItemUiModel()
+
+    data class Separator(val text: String) : TopicListItemUiModel()
+}
 
 data class CategoryLabel(val name: String, val color: String)
 
-class TopicToUiModel @Inject constructor(context: Context) : (TopicWithUsersAndCategory) -> TopicCardUiModel {
+class TopicToUiModel @Inject constructor(context: Context) : (TopicWithUsersAndCategory) -> TopicListItemUiModel.TopicCard {
 
     private val resources = context.resources
 
-    override fun invoke(topic: TopicWithUsersAndCategory): TopicCardUiModel = TopicCardUiModel(
-        id = topic.id,
-        title = topic.title,
-        userImageUrlTemplates = topic.users.map { it.avatarTemplate },
-        subtitle = getSubtitle(topic),
-        categoryLabel = topic.category?.let { CategoryLabel(it.name, it.color) }
-    )
+    override fun invoke(topic: TopicWithUsersAndCategory): TopicListItemUiModel.TopicCard =
+        TopicListItemUiModel.TopicCard(
+            id = topic.id,
+            title = topic.title,
+            userImageUrlTemplates = topic.users.map { it.avatarTemplate },
+            subtitle = getSubtitle(topic),
+            categoryLabel = topic.category?.let { CategoryLabel(it.name, it.color) },
+            lastPostedAt = topic.lastPostedAt
+        )
 
     private fun getSubtitle(topic: TopicWithUsersAndCategory): String {
         val replies = resources.getQuantityString(

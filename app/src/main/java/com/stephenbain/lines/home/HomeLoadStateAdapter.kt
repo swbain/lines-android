@@ -26,9 +26,6 @@ class HomeLoadStateViewHolder(parent: ViewGroup, retry: () -> Unit) :
 }
 
 class HomeLoadStateAdapter(private val retry: () -> Unit) : LoadStateAdapter<HomeLoadStateViewHolder>() {
-
-
-
     override fun onBindViewHolder(holder: HomeLoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
     }

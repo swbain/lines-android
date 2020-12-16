@@ -19,7 +19,7 @@ class TopicListItemView(private val binding: ListItemTopicBinding, private val p
         binding.imageView5
     )
 
-    fun setItem(item: TopicCardUiModel) {
+    fun setItem(item: TopicListItemUiModel.TopicCard) {
         binding.title.text = item.title
 
         binding.subtitle.setCurrentText(item.subtitle)

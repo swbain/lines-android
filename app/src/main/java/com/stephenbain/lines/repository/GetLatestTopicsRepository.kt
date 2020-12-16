@@ -32,7 +32,7 @@ private class GetLatestApiPagingSource(
 
             if (categories.isEmpty()) {
                 categories = hashMapOf<Long, Category>().apply {
-                    api.getCategories().categoryList.categories.forEach { category ->
+                    api.getCategories().forEach { category ->
                         put(category.id, category)
                     }
                 }

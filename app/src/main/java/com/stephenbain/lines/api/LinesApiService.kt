@@ -22,8 +22,11 @@ interface LinesApiService {
     ): GetLatestApiResponse
 
     @GET("/categories.json")
-    suspend fun getCategories(): CategoriesResponse
+    suspend fun getCategoriesResponse(): CategoriesResponse
+}
 
+suspend fun LinesApiService.getCategories(): List<Category> {
+    return getCategoriesResponse().categoryList.categories
 }
 
 suspend fun LinesApiService.getLatestForCategory(category: Category, page: Int = 0): GetLatestApiResponse {

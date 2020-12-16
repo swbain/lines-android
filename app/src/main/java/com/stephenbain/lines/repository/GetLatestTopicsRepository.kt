@@ -27,8 +27,6 @@ private class GetLatestApiPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TopicWithUsersAndCategory> {
         return try {
-            val pageNumber = params.key ?: 0
-
             if (categories.isEmpty()) {
                 categories = hashMapOf<Long, Category>().apply {
                     api.getCategories().forEach { category ->
@@ -36,6 +34,8 @@ private class GetLatestApiPagingSource(
                     }
                 }
             }
+
+            val pageNumber = params.key ?: 0
 
             val response = api.getLatest(page = pageNumber)
 

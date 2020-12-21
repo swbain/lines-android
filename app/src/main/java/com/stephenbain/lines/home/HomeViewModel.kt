@@ -10,7 +10,6 @@ import com.stephenbain.lines.repository.TopicWithUsers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.map
-import kotlin.random.Random
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -25,19 +24,28 @@ class HomeViewModel @ViewModelInject constructor(
 
     private fun createUiModel(pagingData: PagingData<TopicWithUsers>): PagingData<TopicListItemUiModel> {
 
-        fun shouldSeparate(): Boolean {
-            return Random.nextInt(4) == 1
-        }
-
         fun getSeparator(): TopicListItemUiModel.Separator {
-            return TopicListItemUiModel.Separator("fake separator!!")
+            return TopicListItemUiModel.Separator("title starts with a vowel")
         }
 
-        return pagingData.map { topicToUiModel(it) }.insertSeparators { before, after ->
-            if (shouldSeparate()) getSeparator()
+        fun shouldSeparate(item: TopicListItemUiModel.TopicCard?): Boolean {
+            val title = item?.title
+            return title?.let {
+                when {
+                    it.startsWith("A") -> true
+                    it.startsWith("E") -> true
+                    it.startsWith("I") -> true
+                    it.startsWith("O") -> true
+                    it.startsWith("U") -> true
+                    else -> false
+                }
+            } ?: false
+        }
+
+
+            return pagingData.map { topicToUiModel(it) }.insertSeparators { _, after ->
+            if (shouldSeparate(after)) getSeparator()
             else null
         }
-
-
     }
 }

@@ -30,18 +30,18 @@ class GetLatestApiPagingSource(private val api: LinesApiService) : PagingSource<
             LoadResult.Error(t)
         }
     }
+}
 
-    private fun GetLatestApiResponse.toTopicsWithUsers(): List<TopicWithUsers> {
-        val allUsers = users.toHashMap { it.id }
-        return topicList.topics.map { it.withUsers(allUsers) }
-    }
+private fun GetLatestApiResponse.toTopicsWithUsers(): List<TopicWithUsers> {
+    val allUsers = users.toHashMap { it.id }
+    return topicList.topics.map { it.withUsers(allUsers) }
+}
 
-    private fun Topic.withUsers(allUsers: Map<Long, User>): TopicWithUsers {
-        return TopicWithUsers(
-            topic = this,
-            users = posters.mapNotNull { allUsers[it.userId] }
-        )
-    }
+private fun Topic.withUsers(allUsers: Map<Long, User>): TopicWithUsers {
+    return TopicWithUsers(
+        topic = this,
+        users = posters.mapNotNull { allUsers[it.userId] }
+    )
 }
 
 data class TopicWithUsers(

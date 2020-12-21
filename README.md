@@ -12,7 +12,7 @@ android app for https://llllllll.co/
   - androidx.recyclerview
   - androidx.constraintlayout
   - androidx.navigation
-  - androidx.test
+  - androidx.paging 3.0 alpha
 + [material components](https://github.com/material-components/material-components-android)
 + [timber](https://github.com/JakeWharton/timber)
 + [dagger 2](https://dagger.dev/) + [dagger-android](https://dagger.dev/dev-guide/android)

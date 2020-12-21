@@ -24,16 +24,6 @@ class TopicListItemView(private val binding: ListItemTopicBinding, private val p
 
         binding.subtitle.setCurrentText(item.subtitle)
 
-        if (item.categoryLabel != null) {
-            binding.category.text = item.categoryLabel.name
-            val bgColor = Color.parseColor( "#${item.categoryLabel.color}")
-            binding.categoryColor.setBackgroundColor(bgColor)
-
-            binding.categoryGroup.isVisible = true
-        } else {
-            binding.categoryGroup.isVisible = false
-        }
-
         loadImages(item.userImageUrlTemplates)
     }
 

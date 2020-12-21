@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class GetLatestTopicsRepository @Inject constructor(private val api: LinesApiService) {
 
-    fun getTopics(): Flow<PagingData<TopicWithUsersAndCategory>> {
+    fun getTopics(): Flow<PagingData<TopicWithUsers>> {
         return Pager(config = PagingConfig(pageSize = 30, prefetchDistance = 5)) {
             GetLatestApiPagingSource(api)
         }.flow
@@ -21,19 +21,10 @@ class GetLatestTopicsRepository @Inject constructor(private val api: LinesApiSer
 
 private class GetLatestApiPagingSource(
     private val api: LinesApiService
-) : PagingSource<Int, TopicWithUsersAndCategory>() {
+) : PagingSource<Int, TopicWithUsers>() {
 
-    var categories = emptyMap<Long, Category>()
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TopicWithUsersAndCategory> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TopicWithUsers> {
         return try {
-            if (categories.isEmpty()) {
-                categories = hashMapOf<Long, Category>().apply {
-                    api.getCategories().forEach { category ->
-                        put(category.id, category)
-                    }
-                }
-            }
 
             val pageNumber = params.key ?: 0
 
@@ -53,22 +44,20 @@ private class GetLatestApiPagingSource(
         }
     }
 
-    private fun GetLatestApiResponse.toTopicsWithUsers(): List<TopicWithUsersAndCategory> {
+    private fun GetLatestApiResponse.toTopicsWithUsers(): List<TopicWithUsers> {
         val allUsers = users.toHashMap { it.id }
         return topicList.topics.map { it.withUsers(allUsers) }
     }
 
-    private fun Topic.withUsers(allUsers: Map<Long, User>): TopicWithUsersAndCategory {
-        return TopicWithUsersAndCategory(
+    private fun Topic.withUsers(allUsers: Map<Long, User>): TopicWithUsers {
+        return TopicWithUsers(
             topic = this,
-            users = posters.mapNotNull { allUsers[it.userId] },
-            category = categories[categoryId]
+            users = posters.mapNotNull { allUsers[it.userId] }
         )
     }
 }
 
-data class TopicWithUsersAndCategory(
+data class TopicWithUsers(
     private val topic: Topic,
-    val users: List<User>,
-    val category: Category?
+    val users: List<User>
 ) : Topic by topic

@@ -8,7 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.stephenbain.lines.repository.GetLatestTopicsRepository
-import com.stephenbain.lines.repository.TopicWithUsersAndCategory
+import com.stephenbain.lines.repository.TopicWithUsers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -26,14 +26,14 @@ class HomeViewModel @ViewModelInject constructor(
         .map { createUiModel(it) }
         .asLiveData(viewModelScope.coroutineContext + Dispatchers.IO)
 
-    private fun createUiModel(pagingData: PagingData<TopicWithUsersAndCategory>): PagingData<TopicListItemUiModel> {
+    private fun createUiModel(pagingData: PagingData<TopicWithUsers>): PagingData<TopicListItemUiModel> {
 
         fun shouldSeparate(): Boolean {
             return Random.nextInt(4) == 1
         }
 
         fun getSeparator(): TopicListItemUiModel.Separator {
-            return TopicListItemUiModel.Separator("this separator is useless")
+            return TopicListItemUiModel.Separator("fake separator!!")
         }
 
         return pagingData.map { topicToUiModel(it) }.insertSeparators { before, after ->

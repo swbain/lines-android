@@ -51,21 +51,6 @@ data class TopicImpl(
 ) : Topic
 
 @JsonClass(generateAdapter = true)
-data class CategoriesResponse(@Json(name = "category_list") val categoryList: CategoryList)
-
-@JsonClass(generateAdapter = true)
-data class CategoryList(val categories: List<Category>)
-
-@JsonClass(generateAdapter = true)
-data class Category(
-    val id: Long,
-    val name: String,
-    val position: Int,
-    @Json(name="topic_count") val topicCount: Int,
-    val color: String
-)
-
-@JsonClass(generateAdapter = true)
 data class User(
     val id: Long,
     val username: String,

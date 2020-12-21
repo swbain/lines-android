@@ -2,7 +2,7 @@ package com.stephenbain.lines.home
 
 import android.content.Context
 import com.stephenbain.lines.R
-import com.stephenbain.lines.repository.TopicWithUsersAndCategory
+import com.stephenbain.lines.repository.TopicWithUsers
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.time.LocalDate
@@ -17,30 +17,26 @@ sealed class TopicListItemUiModel {
         val title: String,
         val userImageUrlTemplates: List<String>,
         val subtitle: String,
-        val categoryLabel: CategoryLabel?,
         val lastPostedAt: Date
     ) : TopicListItemUiModel()
 
     data class Separator(val text: String) : TopicListItemUiModel()
 }
 
-data class CategoryLabel(val name: String, val color: String)
-
-class TopicToUiModel @Inject constructor(context: Context) : (TopicWithUsersAndCategory) -> TopicListItemUiModel.TopicCard {
+class TopicToUiModel @Inject constructor(context: Context) : (TopicWithUsers) -> TopicListItemUiModel.TopicCard {
 
     private val resources = context.resources
 
-    override fun invoke(topic: TopicWithUsersAndCategory): TopicListItemUiModel.TopicCard =
+    override fun invoke(topic: TopicWithUsers): TopicListItemUiModel.TopicCard =
         TopicListItemUiModel.TopicCard(
             id = topic.id,
             title = topic.title,
             userImageUrlTemplates = topic.users.map { it.avatarTemplate },
             subtitle = getSubtitle(topic),
-            categoryLabel = topic.category?.let { CategoryLabel(it.name, it.color) },
             lastPostedAt = topic.lastPostedAt
         )
 
-    private fun getSubtitle(topic: TopicWithUsersAndCategory): String {
+    private fun getSubtitle(topic: TopicWithUsers): String {
         val replies = resources.getQuantityString(
             R.plurals.replies_label,
             topic.postCount - 1,

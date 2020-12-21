@@ -11,24 +11,4 @@ interface LinesApiService {
         @Query("page") page: Int = 0,
         @Query("no_definitions") noDefinitions: Boolean = true
     ): GetLatestApiResponse
-
-    @GET("/c/{category}/{id}/l/latest.json")
-    suspend fun getLatestForCategory(
-        @Path("category") categoryName: String,
-        @Path("id") id: Long,
-        @Query("page") page: Int,
-        @Query("order") order: String = "default",
-        @Query("ascending") ascending: Boolean = false
-    ): GetLatestApiResponse
-
-    @GET("/categories.json")
-    suspend fun getCategoriesResponse(): CategoriesResponse
-}
-
-suspend fun LinesApiService.getCategories(): List<Category> {
-    return getCategoriesResponse().categoryList.categories
-}
-
-suspend fun LinesApiService.getLatestForCategory(category: Category, page: Int = 0): GetLatestApiResponse {
-    return getLatestForCategory(category.name, category.id, page)
 }

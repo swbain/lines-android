@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @ExperimentalPagingApi
 @FlowPreview
@@ -45,8 +46,9 @@ class PostsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecycler()
         setUpLoading()
-        viewModel.data.observe(viewLifecycleOwner) {
-            adapter.submitData(lifecycle, it)
+
+        lifecycleScope.launch {
+            viewModel.data.collectLatest { adapter.submitData(it) }
         }
     }
 

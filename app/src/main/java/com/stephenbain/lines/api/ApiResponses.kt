@@ -13,7 +13,7 @@ data class GetLatestApiResponse(
 @JsonClass(generateAdapter = true)
 data class TopicList(
     val topics: List<Topic>,
-    @Json(name = "more_topics_url") val moreTopicsUrl: String?
+    @Json(name = "per_page") val perPage: Int
 )
 
 interface Topic {

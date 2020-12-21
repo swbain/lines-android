@@ -17,12 +17,11 @@ class GetLatestApiPagingSource(private val api: LinesApiService) : PagingSource<
 
             val response = api.getLatest(page = pageNumber)
 
-            val prevKey = if (pageNumber > 0) pageNumber - 1 else null
             val hasNext = response.topicList.topics.size == response.topicList.perPage // if we have less topics than page size, we are at the last page.
             val nextKey = if (hasNext) pageNumber + 1 else null
             LoadResult.Page(
                 data = response.toTopicsWithUsers(),
-                prevKey = prevKey,
+                prevKey = null, // only paging forward
                 nextKey = nextKey
             )
         } catch (t: Throwable) {
